@@ -47,15 +47,15 @@ nickel process. We don't touch reading fonts.
 ## The 16 target files
 
 Defined once in `scripts/targets.py`; must match this table.
-Source of the list: `lelinhtinh/kobo-tieng-viet` payload — **not yet verified
-against stock firmware**.
+**Candidate list — not yet verified against stock firmware** (see `TODO.md`).
+Rows marked ⚠ are suspected wrong.
 
 | Filename | Family | Subfamily |
 |---|---|---|
 | RakutenSansUIApp-Regular.ttf | Rakuten Sans | Regular |
 | RakutenSansUIApp-Bold.ttf | Rakuten Sans | Bold |
 | RakutenSansUIApp-Italic.ttf | Rakuten Sans | Italic |
-| RakutenSansUIApp-BoldItali.ttf | Rakuten Sans | Bold Italic |
+| ⚠ RakutenSansUIApp-BoldItali.ttf | Rakuten Sans | Bold Italic |
 | RakutenSerifApp-Regular.ttf | Rakuten Serif | Regular |
 | RakutenSerifApp-Bold.ttf | Rakuten Serif | Bold |
 | RakutenSerifApp-Italic.ttf | Rakuten Serif | Italic |
@@ -69,9 +69,11 @@ against stock firmware**.
 | georgiai.ttf | Georgia | Italic |
 | georgiaz.ttf | Georgia | Bold Italic |
 
-Oddities are intentional: `BoldItali` (sans, no trailing c) vs `BoldItalic`
-(serif); Georgia uses b/i/z. Rakuten = current firmware, Avenir/Georgia =
-legacy; build all 16.
+Filenames must match the firmware exactly. A wrong name adds a file instead
+of overwriting, and the stock font silently wins. Only change a filename
+based on the firmware listing, never by guessing a "correct" spelling.
+
+Rakuten = current firmware, Avenir/Georgia = legacy; build all 16.
 
 ## Verification (gates the build)
 

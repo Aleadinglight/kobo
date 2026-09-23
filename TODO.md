@@ -19,10 +19,22 @@ Resolve by writing the answer under the item and marking `[x]`.
 ## Warning
 
 - [ ] **W1. 16 filenames + family names unverified against stock firmware.**
-  Taken from `lelinhtinh/kobo-tieng-viet`. Target: Clara BW and Libra 2,
-  recent firmware. Verify by extracting the official firmware zip for each
-  model and listing its font directory + reading name ID 1. If the two
+  Target: Clara BW and Libra 2, recent firmware. Verify by extracting the
+  official firmware zip for each model (it contains a KoboRoot.tgz with the
+  font directory), listing the fonts, and reading name ID 1. If the two
   models differ, we need per-model targets.
+  Firmware hosts are blocked in the build environment, so the user must
+  download the zip, or allow `ereaderfiles.kobo.com` in the environment's
+  network settings.
+  Suspect rows:
+  - `RakutenSansUIApp-BoldItali.ttf` — inconsistent with
+    `RakutenSerifApp-BoldItalic.ttf`; likely a typo.
+  - Avenir filenames — no evidence either way.
+  - `georgia/b/i/z.ttf` — matches Microsoft's standard Georgia filenames, so
+    plausible.
+  Fallback if unverifiable: ship both `BoldItali` and `BoldItalic` for sans.
+  The extra file is harmless (same font, same names); whichever matches
+  stock overwrites it.
   > Firmware versions to check:
 
 - [ ] **W2. "No source name in name table" vs. license text.**
