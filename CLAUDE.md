@@ -19,7 +19,9 @@ contains, with commands). Keep them current.
   and commands: `FIRMWARE.md`.
 - Font directory on device: `/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
   (nickel uses Qt 4.6.2 embedded).
-- Stock fonts there are wrapped (`QTD` + length + zlib), not plain TTF.
+- Stock fonts there are wrapped (`QTD` + length + zlib). We ship plain TTF,
+  which nickel also loads (assumption from earlier plain-TTF builds that
+  changed the UI).
 
 ## How the patch works
 

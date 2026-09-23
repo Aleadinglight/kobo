@@ -18,23 +18,12 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 ## Warning
 
-- [ ] **W1. Font file format on the device** (default chosen, confirm on
-  device).
-  Kobo's own fonts are stored compressed with a small header, not as normal
-  `.ttf` files. We don't know for sure whether the Kobo also reads a normal
-  `.ttf` placed there. Most likely yes, since your earlier build changed the
-  UI.
-  Default: ship normal `.ttf`. `build.sh` can also produce a compressed
-  version (same format as Kobo's). Use it only if the normal one shows no
-  change on the device.
-  > Answer:
-
-- [ ] **W2. Clara BW firmware version mapping is assumed.**
+- [ ] **W1. Clara BW firmware version mapping is assumed.**
   Libra H2O confirmed by user: 4.38.23697 (kobo7). Clara BW assumed kobo12
   → 4.45.23697. Confirm: Settings → Device information → firmware version.
   > Libra H2O: 4.38.23697 ✔ / Clara BW: …
 
-- [ ] **W3. Device test (manual).** After first install, record:
+- [ ] **W2. Device test (manual).** After first install, record:
   - menus / library titles show Vietnamese correctly (no boxes)
   - UI text is not bold
   - device model + firmware version
@@ -67,6 +56,9 @@ Resolve by writing the answer under the item and marking `[x]`.
 - [x] Source name vs. license text → fine. Source is a Google Fonts (OFL)
   font; drop its name from the name table, ship the license file, name the
   real font in README.
+- [x] Plain TTF or wrapped like stock? → Plain TTF. Assumption based on the
+  user's earlier build and the reference payload, both plain TTF, which
+  changed the UI on device.
 - [x] Filenames and family names vs. stock firmware → verified, see
   `FIRMWARE.md`. `RakutenSansUIApp-BoldItali.ttf` was a typo; the real file
   is `RakutenSansUIApp-BoldItalic.ttf`. Avenir regular/italic are Medium/500.
