@@ -1,65 +1,54 @@
 # CLAUDE.md
 
-Makes the Kobo interface (Kobo nickel) render Vietnamese by replacing the
-system UI fonts, packaged as KoboRoot.tgz.
+Builds `KoboRoot.tgz`: a patch that replaces the Kobo system UI fonts with a
+Vietnamese-capable font, so the interface (titles, menus, progress, TOC)
+renders Vietnamese.
 
-Scope: the interface only (titles, menus, progress, TOC). Book text uses
-normal sideloaded fonts. Not a UI translation.
+Out of scope: book text (use normal sideloaded fonts), UI translation,
+dictionaries, patching libnickel or its stylesheets.
 
-Working files:
-- `PLAN.md` — implementation plan and progress. Update it as phases complete.
-- `TODO.md` — open questions and issues, ordered Breaking / Warning /
-  Improvement. Add any question there instead of guessing.
+Working files: `PLAN.md` (phases + progress), `TODO.md` (open questions,
+Breaking / Warning / Improvement). Keep both current.
 
-## How it works
+## Targets
 
-The Kobo interface is drawn by nickel using Qt 4.6.2 embedded. Fonts live at
-`/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`.
+- Devices: Kobo Clara BW and Libra 2, recent firmware. Assumed to share the
+  same UI font files (same nickel build line) — unverified, see `TODO.md`.
+- Font directory on device: `/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
+  (nickel uses Qt 4.6.2 embedded).
 
-Note: "Kobo Nickel" is also the name of a reading font in the font picker, for
-book text. Unrelated to the nickel process. This repo changes UI fonts, not
-reading fonts.
+## How the patch works
 
-Qt matches fonts by **internal name table (name ID 1), not filename.**
-Renaming a file alone does nothing — and breaks things, because the family
-that previously claimed that name no longer exists. The rebrand must rewrite
-the name table AND save to the exact stock filename.
+Qt picks fonts by the **internal family name (name ID 1)**, not the filename.
+So each output must:
 
-Install: copy `KoboRoot.tgz` to `.kobo/`, eject. Applied on boot, then deleted.
+1. carry the stock family/subfamily name in its name table, and
+2. be saved under the exact stock filename, so it overwrites the stock file.
 
-## Font verification (do this first — it gates everything)
+Renaming a file alone does nothing. A filename typo adds a file instead of
+overwriting, and the stock font silently wins.
 
-Two scripted checks, same script, run at two points.
+Install: copy `KoboRoot.tgz` into `.kobo/` on the device, eject. The device
+applies it on reboot and deletes it.
 
-**On source fonts, before any rebrand.** Fail loudly on any violation:
+"Kobo Nickel" in the reading-font picker is a book font, unrelated to the
+nickel process. We don't touch reading fonts.
 
-- `usWeightClass` — 400 for Regular and Italic, 700 for Bold and BoldItalic
-- File hashes — four distinct values (catches the same file downloaded four times)
-- Italic bit set on italic faces, clear on uprights
-- Static, not variable (`fvar` absent) — variable fonts fail silently on Kobo's
-  Qt/FreeType, and variable is the Google Fonts default download
-- `glyf` outlines, not CFF/OTF
-- Vietnamese precomposed coverage including `đ` and `₫`
+## Source font
 
-**On the 16 built files, before packaging.** Same weight and hash checks, plus:
+- One font family, 4 static TTFs (Regular, Bold, Italic, BoldItalic) plus its
+  license, committed in `sources/`. Provided by the user.
+- The same source feeds all four target families. Rakuten Sans and Rakuten
+  Serif (and Avenir / Georgia) end up identical — intended, for simplicity.
+- Code must not hardcode the source's name; read it from the source files.
+- README names the real font and ships its license, even though the internal
+  name is rewritten.
 
-- Family and subfamily names match the target table
-- No trace of the source font name anywhere in the name table
-- Vietnamese coverage survived the rebrand
+## The 16 target files
 
-The second pass is not redundant. A bug that copies the wrong source into the
-wrong slot is invisible unless the outputs are read back.
-
-Weight and hash are the checks that matter most — a wrong-weight source
-produces a uniformly bold UI while every other check passes.
-
-## The 16 files
-
-**Source: `lelinhtinh/kobo-tieng-viet` payload. Not verified against stock
-firmware.** Confirm by extracting the official firmware zip for the target
-model (it contains a KoboRoot.tgz with the rootfs fonts) and listing the font
-directory. USB mass storage only exposes the user partition, so the device
-itself can't be listed without SSH.
+Defined once in `scripts/targets.py`; must match this table.
+Source of the list: `lelinhtinh/kobo-tieng-viet` payload — **not yet verified
+against stock firmware**.
 
 | Filename | Family | Subfamily |
 |---|---|---|
@@ -80,71 +69,64 @@ itself can't be listed without SSH.
 | georgiai.ttf | Georgia | Italic |
 | georgiaz.ttf | Georgia | Bold Italic |
 
-Filename oddities, per that source: sans bold-italic is `BoldItali` (no
-trailing c), serif bold-italic is `BoldItalic` (has it), Georgia uses b/i/z
-suffixes. A mismatch adds a file instead of overwriting and the stock font
-wins — silently. Bold-italic and the legacy families are rarely rendered, so
-a typo there would go unnoticed by everyone downstream.
+Oddities are intentional: `BoldItali` (sans, no trailing c) vs `BoldItalic`
+(serif); Georgia uses b/i/z. Rakuten = current firmware, Avenir/Georgia =
+legacy; build all 16.
 
-Rakuten Sans/Serif are current firmware; Avenir/Georgia legacy. Build all 16.
+## Verification (gates the build)
 
-## Source fonts
+One script, two passes. Any failure stops the build.
 
-Noto Sans (static) verified for coverage. Ship the license file and state the
-real font name in the README even though the internal name is rewritten.
+**Sources (before rebrand):**
+- `usWeightClass`: 400 Regular/Italic, 700 Bold/BoldItalic
+- 4 distinct file hashes
+- Italic bit set on italics, clear on uprights
+- Static: no `fvar` (variable fonts fail silently on Kobo; Google Fonts'
+  default download is variable)
+- TrueType `glyf` outlines, no CFF
+- Vietnamese precomposed coverage, including `đ` and `₫`
 
-Mapping one source across both Rakuten Sans and Rakuten Serif makes those
-families byte-identical — selecting either gives the same rendering. That's
-expected, not a bug. Use a separate serif source if the distinction matters.
+**Outputs (after rebrand):**
+- Exactly the 16 filenames above
+- Same weight and italic checks, per target style
+- Hashes differ across styles (same style may share a hash — same source)
+- Family/subfamily match the table
+- Source font name appears nowhere in the name table
+- Vietnamese coverage survived
+
+The output pass is not redundant: a wrong-source-in-wrong-slot bug is only
+visible by reading outputs back. Weight and hash matter most — a
+wrong-weight source gives a uniformly bold UI while everything else passes.
 
 ## Build
 
-Python venv with fonttools — not system pip, no sudo. `build.sh` creates
-`.venv/` and calls `.venv/bin/python` directly; no manual activation.
+`./build.sh` is the only entry point. It:
 
-1. Verify sources (above) — hard fail, don't continue
-2. Rebrand 16 outputs to the exact filenames above
-3. Verify outputs (above) — hard fail
-4. Stage under `usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
-5. `find . -name '.DS_Store' -delete; find . -name '._*' -delete`
-6. `COPYFILE_DISABLE=1 tar -czf KoboRoot.tgz -C root usr`
-7. `tar -tzf KoboRoot.tgz` — starts at `usr/`, no wrapper dir, no junk
-
-## Note: bold UI
-
-A previous build rendered UI text bold. The most likely cause is source fonts
-that weren't the weights they were assumed to be — that build only checked
-static/glyf and never checked `usWeightClass`, which is exactly the property
-that produces this symptom while everything else passes.
-
-Confirm before investigating further: read `usWeightClass` and file hashes out
-of the previously installed tgz. Uniform 700, or identical hashes, closes it.
-
-Only if the weights were genuinely correct is there a real open question, and
-the diagnostic is: build one tgz where the Bold file carries Regular outlines
-but stays labeled Bold. Renders normal → the header is being served the Bold
-file. Still bold → the weight comes from nickel's stylesheet or synthetic
-bold, and there is no font-side fix.
+1. creates `.venv/` with fonttools (no system pip, no sudo; no manual activate)
+2. verifies sources → rebrands → verifies outputs
+3. stages under `root/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
+4. removes `.DS_Store` / `._*`, runs `COPYFILE_DISABLE=1 tar -czf KoboRoot.tgz -C root usr`
+5. checks `tar -tzf`: every entry under `usr/`, exactly 16 fonts, no junk
 
 ## Known limits
 
-- Firmware updates restore stock fonts. Fix: re-copy the same tgz, no rebuild.
-- If a firmware renames the UI families (Rakuten already did this once:
-  Avenir → Rakuten Sans), re-copying won't work. Read the new family name from
-  the firmware zip and redo the rebrand.
-- Dictionary is a separate install — not a file overwrite, can't share the
-  tgz. Source and mechanism both undecided.
+- Firmware updates restore stock fonts → re-copy the same tgz.
+- If firmware renames UI families again (as with Avenir → Rakuten Sans),
+  update `targets.py` from the new firmware and rebuild.
+- A previous build rendered the UI bold; most likely wrong-weight sources,
+  which the weight check now catches. Only if it recurs with verified
+  weights: test a tgz whose Bold file carries Regular outlines. Normal →
+  font-side fixable; still bold → nickel stylesheet / synthetic bold, no
+  font-side fix.
 
 ## Rules
 
-- Don't state as verified what hasn't been checked. Anything asserted as fact
-  carries the command that produced it, or is marked an assumption.
-- Don't patch libnickel or its stylesheets.
-- Verification failures are hard stops. Never loosen a check to get a build
-  through; fix the input or record it in `TODO.md`.
-- The 16-row target table lives in one place in code (`scripts/targets.py`)
-  and must match the table above exactly.
-- Open questions go in `TODO.md`, not in guesses. Don't implement past a
-  Breaking item that blocks the step.
-- Build outputs (`build/`, `root/`, `KoboRoot.tgz`, `.venv/`) are not
-  committed unless `TODO.md` records a decision to do so.
+1. Don't claim something is verified without the command that showed it;
+   otherwise mark it an assumption.
+2. Never loosen a check to get a build through. Fix the input, or log it in
+   `TODO.md`.
+3. Unclear decisions go in `TODO.md`, not in guesses. Don't build past a
+   Breaking item that blocks the step.
+4. Commit sources, scripts and docs. Don't commit `.venv/`, `build/`,
+   `root/`, or `KoboRoot.tgz` (release decision tracked in `TODO.md`).
+5. Keep scripts small, standard-library + fonttools only.
