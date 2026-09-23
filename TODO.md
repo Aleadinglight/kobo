@@ -16,26 +16,37 @@ Resolve by writing the answer under the item and marking `[x]`.
   tested before that.
   > Pending: user upload.
 
+- [ ] **B2. Ship the Avenir/Georgia files?**
+  Facts (`FIRMWARE.md`): Clara BW firmware doesn't contain them at all;
+  Libra 2 does. Nickel uses `font-family: Georgia` / `Avenir` in some
+  built-in HTML (e.g. "What's new" pages). Unknown whether they are also
+  reading-font choices for book text, which is out of scope.
+  Options:
+  - (a) Ship only the 8 Rakuten files. Same tgz works on both devices, adds
+    nothing to Clara BW. Legacy pages on Libra 2 may still show boxes.
+  - (b) Ship all 16. On Clara BW this *adds* two new families instead of
+    replacing anything.
+  - (c) Two tgz files, one per device.
+  Recommendation: (a) first, add Avenir/Georgia later only if a Libra 2
+  screen still shows boxes.
+  > Answer:
+
+- [ ] **B3. Plain TTF or wrapped like stock?**
+  Stock fonts are `QTD` + length + zlib (`FIRMWARE.md`). Unknown whether
+  nickel also loads plain TTF at these paths. A previous build (believed to
+  be plain TTF) did change the UI, which suggests plain works, but that
+  hasn't been verified.
+  Options: (a) plain TTF; (b) wrap outputs the same way as stock (easy:
+  `b"QTD" + len.to_bytes(4,"big") + zlib.compress(ttf)`).
+  Recommendation: build both variants; test plain first on device. If it
+  works, keep plain (simpler).
+  > Answer:
+
 ## Warning
 
-- [ ] **W1. 16 filenames + family names unverified against stock firmware.**
-  Target: Clara BW and Libra 2, recent firmware. Verify by extracting the
-  official firmware zip for each model (it contains a KoboRoot.tgz with the
-  font directory), listing the fonts, and reading name ID 1. If the two
-  models differ, we need per-model targets.
-  Firmware hosts are blocked in the build environment, so the user must
-  download the zip, or allow `ereaderfiles.kobo.com` in the environment's
-  network settings.
-  Suspect rows:
-  - `RakutenSansUIApp-BoldItali.ttf` — inconsistent with
-    `RakutenSerifApp-BoldItalic.ttf`; likely a typo.
-  - Avenir filenames — no evidence either way.
-  - `georgia/b/i/z.ttf` — matches Microsoft's standard Georgia filenames, so
-    plausible.
-  Fallback if unverifiable: ship both `BoldItali` and `BoldItalic` for sans.
-  The extra file is harmless (same font, same names); whichever matches
-  stock overwrites it.
-  > Firmware versions to check:
+- [ ] **W1. Avenir regular weight is Medium/500, not Regular/400.**
+  Only matters if B2 ships Avenir. Plan: label the output "Medium", weight
+  500, using the Regular source outlines, to mirror stock.
 
 - [ ] **W2. "No source name in name table" vs. license text.**
   Copyright (ID 0) and license (ID 13) usually name the source font. Plan:
@@ -44,7 +55,13 @@ Resolve by writing the answer under the item and marking `[x]`.
   what the OFL asks for, so this should be compliant. Confirm.
   > Answer:
 
-- [ ] **W3. Device test (manual).** After first install, record:
+- [ ] **W3. Device ↔ firmware mapping is assumed.**
+  Kobo API IDs 388 → kobo9 → 4.38.23697 (Libra 2) and 391 → kobo12 →
+  4.45.23697 (Clara BW). Confirm on your devices: Settings → Device
+  information → firmware version.
+  > Libra 2: … / Clara BW: …
+
+- [ ] **W4. Device test (manual).** After first install, record:
   - menus / library titles show Vietnamese correctly (no boxes)
   - UI text is not bold
   - device model + firmware version
@@ -52,18 +69,24 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 ## Improvement
 
-- [ ] **I1. Distribute `KoboRoot.tgz` how?** Default: not committed; attach
+- [ ] **I1. Match stock metrics.** Stock Rakuten fonts set USE_TYPO_METRICS
+  (fsSelection 0x80). If the new font's line height clips or shifts the UI,
+  copy vertical metrics from stock. Only if the device test shows problems.
+- [ ] **I2. Distribute `KoboRoot.tgz` how?** Default: not committed; attach
   to a GitHub Release.
-- [ ] **I2. CI build** — GitHub Actions runs `./build.sh`, uploads the tgz.
-- [ ] **I3. Test EPUB** — build a tiny EPUB with a Vietnamese title, author
-  and TOC, to check the UI quickly on device.
-- [ ] **I4. Render preview** — PNG of a Vietnamese sample line per output
-  font, before copying to the device.
-- [ ] **I5. Old bold tgz** — if found, run `inspect_tgz.py` on it to confirm
-  the wrong-weight theory. Low priority.
-- [ ] **I6. Dictionary** — separate install, out of scope.
+- [ ] **I3. CI build** — GitHub Actions runs `./build.sh`, uploads the tgz.
+- [ ] **I4. Test EPUB** — tiny EPUB with a Vietnamese title, author and TOC,
+  to check the UI quickly on device.
+- [ ] **I5. Render preview** — PNG of a Vietnamese sample line per output.
+- [ ] **I6. Firmware check script** — turn the `FIRMWARE.md` commands into
+  `scripts/inspect_firmware.py`, to re-run after future firmware updates.
+- [ ] **I7. Old bold tgz** — if found, run it through the same inspection.
+- [ ] **I8. Dictionary** — separate install, out of scope.
 
 ## Resolved
 
 - [x] One source or separate serif? → One source for all families.
 - [x] Target devices? → Clara BW + Libra 2, recent firmware.
+- [x] Filenames and family names vs. stock firmware → verified, see
+  `FIRMWARE.md`. `RakutenSansUIApp-BoldItali.ttf` was a typo; the real file
+  is `RakutenSansUIApp-BoldItalic.ttf`. Avenir regular/italic are Medium/500.

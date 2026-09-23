@@ -25,6 +25,7 @@ Git-ignored: `.venv/`, `build/`, `root/`, `KoboRoot.tgz`.
 
 ### 0. Frame
 - [x] CLAUDE.md, PLAN.md, TODO.md
+- [x] Verify target filenames/names against firmware → `FIRMWARE.md`
 - [ ] `.gitignore`, `requirements.txt`, `sources/README` (what to drop in)
 
 ### 1. Scripts (no real font needed)
@@ -40,7 +41,7 @@ Git-ignored: `.venv/`, `build/`, `root/`, `KoboRoot.tgz`.
 ### 2. Build
 - [ ] `build.sh` — venv, verify → rebrand → verify, stage, clean, tar, list
 
-### 3. Real sources  `[!]` TODO B1
+### 3. Real sources  `[!]` TODO B1, B2, B3
 - [ ] User adds fonts to `sources/`
 - [ ] `./build.sh` passes
 
@@ -52,5 +53,5 @@ Git-ignored: `.venv/`, `build/`, `root/`, `KoboRoot.tgz`.
 ## Done when
 
 `./build.sh` on a clean checkout produces `KoboRoot.tgz`, both verify passes
-are all PASS, `tar -tzf` lists exactly 16 fonts under `usr/`, and the device
+are all PASS, `tar -tzf` lists exactly the target fonts under `usr/`, and the device
 test in TODO W3 is recorded.

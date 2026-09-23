@@ -8,14 +8,17 @@ Out of scope: book text (use normal sideloaded fonts), UI translation,
 dictionaries, patching libnickel or its stylesheets.
 
 Working files: `PLAN.md` (phases + progress), `TODO.md` (open questions,
-Breaking / Warning / Improvement). Keep both current.
+Breaking / Warning / Improvement), `FIRMWARE.md` (what stock firmware
+contains, with commands). Keep them current.
 
 ## Targets
 
-- Devices: Kobo Clara BW and Libra 2, recent firmware. Assumed to share the
-  same UI font files (same nickel build line) — unverified, see `TODO.md`.
+- Devices: Kobo Clara BW (fw 4.45) and Libra 2 (fw 4.38). Their Rakuten UI
+  fonts are byte-identical; only Libra 2 also ships Avenir/Georgia. Details
+  and commands: `FIRMWARE.md`.
 - Font directory on device: `/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
   (nickel uses Qt 4.6.2 embedded).
+- Stock fonts there are wrapped (`QTD` + length + zlib), not plain TTF.
 
 ## How the patch works
 
@@ -38,42 +41,41 @@ nickel process. We don't touch reading fonts.
 
 - One font family, 4 static TTFs (Regular, Bold, Italic, BoldItalic) plus its
   license, committed in `sources/`. Provided by the user.
-- The same source feeds all four target families. Rakuten Sans and Rakuten
-  Serif (and Avenir / Georgia) end up identical — intended, for simplicity.
+- The same source feeds every target family. Rakuten Sans and Rakuten Serif
+  (and Avenir / Georgia, if shipped) end up identical — intended.
 - Code must not hardcode the source's name; read it from the source files.
 - README names the real font and ships its license, even though the internal
   name is rewritten.
 
-## The 16 target files
+## Target files
 
-Defined once in `scripts/targets.py`; must match this table.
-**Candidate list — not yet verified against stock firmware** (see `TODO.md`).
-Rows marked ⚠ are suspected wrong.
+Defined once in `scripts/targets.py`; must match this table. Verified
+against firmware (see `FIRMWARE.md`). Weight = stock `usWeightClass`.
 
-| Filename | Family | Subfamily |
-|---|---|---|
-| RakutenSansUIApp-Regular.ttf | Rakuten Sans | Regular |
-| RakutenSansUIApp-Bold.ttf | Rakuten Sans | Bold |
-| RakutenSansUIApp-Italic.ttf | Rakuten Sans | Italic |
-| ⚠ RakutenSansUIApp-BoldItali.ttf | Rakuten Sans | Bold Italic |
-| RakutenSerifApp-Regular.ttf | Rakuten Serif | Regular |
-| RakutenSerifApp-Bold.ttf | Rakuten Serif | Bold |
-| RakutenSerifApp-Italic.ttf | Rakuten Serif | Italic |
-| RakutenSerifApp-BoldItalic.ttf | Rakuten Serif | Bold Italic |
-| Avenir.ttf | Avenir Next | Regular |
-| Avenir-Bold.ttf | Avenir Next | Bold |
-| Avenir-Italic.ttf | Avenir Next | Italic |
-| Avenir-BoldItalic.ttf | Avenir Next | Bold Italic |
-| georgia.ttf | Georgia | Regular |
-| georgiab.ttf | Georgia | Bold |
-| georgiai.ttf | Georgia | Italic |
-| georgiaz.ttf | Georgia | Bold Italic |
+| Filename | Family | Subfamily | Weight | On |
+|---|---|---|---|---|
+| RakutenSansUIApp-Regular.ttf | Rakuten Sans | Regular | 400 | both |
+| RakutenSansUIApp-Bold.ttf | Rakuten Sans | Bold | 700 | both |
+| RakutenSansUIApp-Italic.ttf | Rakuten Sans | Italic | 400 | both |
+| RakutenSansUIApp-BoldItalic.ttf | Rakuten Sans | Bold Italic | 700 | both |
+| RakutenSerifApp-Regular.ttf | Rakuten Serif | Regular | 400 | both |
+| RakutenSerifApp-Bold.ttf | Rakuten Serif | Bold | 700 | both |
+| RakutenSerifApp-Italic.ttf | Rakuten Serif | Italic | 400 | both |
+| RakutenSerifApp-BoldItalic.ttf | Rakuten Serif | Bold Italic | 700 | both |
+| Avenir.ttf | Avenir Next | Medium | 500 | Libra 2 |
+| Avenir-Bold.ttf | Avenir Next | Bold | 700 | Libra 2 |
+| Avenir-Italic.ttf | Avenir Next | Medium Italic | 500 | Libra 2 |
+| Avenir-BoldItalic.ttf | Avenir Next | Bold Italic | 700 | Libra 2 |
+| georgia.ttf | Georgia | Regular | 400 | Libra 2 |
+| georgiab.ttf | Georgia | Bold | 700 | Libra 2 |
+| georgiai.ttf | Georgia | Italic | 400 | Libra 2 |
+| georgiaz.ttf | Georgia | Bold Italic | 700 | Libra 2 |
 
 Filenames must match the firmware exactly. A wrong name adds a file instead
-of overwriting, and the stock font silently wins. Only change a filename
-based on the firmware listing, never by guessing a "correct" spelling.
+of overwriting, and the stock font silently wins. Only change a filename or
+name based on a firmware listing, never by guessing.
 
-Rakuten = current firmware, Avenir/Georgia = legacy; build all 16.
+Whether to ship the Avenir/Georgia rows is open (`TODO.md` B2).
 
 ## Verification (gates the build)
 
@@ -89,8 +91,8 @@ One script, two passes. Any failure stops the build.
 - Vietnamese precomposed coverage, including `đ` and `₫`
 
 **Outputs (after rebrand):**
-- Exactly the 16 filenames above
-- Same weight and italic checks, per target style
+- Exactly the filenames in the target table
+- Weight matches the table's Weight column; italic bit per target style
 - Hashes differ across styles (same style may share a hash — same source)
 - Family/subfamily match the table
 - Source font name appears nowhere in the name table
@@ -108,13 +110,13 @@ wrong-weight source gives a uniformly bold UI while everything else passes.
 2. verifies sources → rebrands → verifies outputs
 3. stages under `root/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
 4. removes `.DS_Store` / `._*`, runs `COPYFILE_DISABLE=1 tar -czf KoboRoot.tgz -C root usr`
-5. checks `tar -tzf`: every entry under `usr/`, exactly 16 fonts, no junk
+5. checks `tar -tzf`: every entry under `usr/`, exactly the target fonts, no junk
 
 ## Known limits
 
 - Firmware updates restore stock fonts → re-copy the same tgz.
 - If firmware renames UI families again (as with Avenir → Rakuten Sans),
-  update `targets.py` from the new firmware and rebuild.
+  re-check the firmware as in `FIRMWARE.md`, update `targets.py`, rebuild.
 - A previous build rendered the UI bold; most likely wrong-weight sources,
   which the weight check now catches. Only if it recurs with verified
   weights: test a tgz whose Bold file carries Regular outlines. Normal →
