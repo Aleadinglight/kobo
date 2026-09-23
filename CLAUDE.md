@@ -13,8 +13,9 @@ contains, with commands). Keep them current.
 
 ## Targets
 
-- Devices: Kobo Clara BW (fw 4.45) and Libra 2 (fw 4.38). Their Rakuten UI
-  fonts are byte-identical; only Libra 2 also ships Avenir/Georgia. Details
+- Devices: Kobo Libra H2O (fw 4.38.23697) and Clara BW 2024 (fw 4.45). Their
+  Rakuten UI fonts are byte-identical; only Libra H2O also ships
+  Avenir/Georgia. Details
   and commands: `FIRMWARE.md`.
 - Font directory on device: `/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
   (nickel uses Qt 4.6.2 embedded).
@@ -62,14 +63,14 @@ against firmware (see `FIRMWARE.md`). Weight = stock `usWeightClass`.
 | RakutenSerifApp-Bold.ttf | Rakuten Serif | Bold | 700 | both |
 | RakutenSerifApp-Italic.ttf | Rakuten Serif | Italic | 400 | both |
 | RakutenSerifApp-BoldItalic.ttf | Rakuten Serif | Bold Italic | 700 | both |
-| Avenir.ttf | Avenir Next | Medium | 500 | Libra 2 |
-| Avenir-Bold.ttf | Avenir Next | Bold | 700 | Libra 2 |
-| Avenir-Italic.ttf | Avenir Next | Medium Italic | 500 | Libra 2 |
-| Avenir-BoldItalic.ttf | Avenir Next | Bold Italic | 700 | Libra 2 |
-| georgia.ttf | Georgia | Regular | 400 | Libra 2 |
-| georgiab.ttf | Georgia | Bold | 700 | Libra 2 |
-| georgiai.ttf | Georgia | Italic | 400 | Libra 2 |
-| georgiaz.ttf | Georgia | Bold Italic | 700 | Libra 2 |
+| Avenir.ttf | Avenir Next | Medium | 500 | Libra H2O |
+| Avenir-Bold.ttf | Avenir Next | Bold | 700 | Libra H2O |
+| Avenir-Italic.ttf | Avenir Next | Medium Italic | 500 | Libra H2O |
+| Avenir-BoldItalic.ttf | Avenir Next | Bold Italic | 700 | Libra H2O |
+| georgia.ttf | Georgia | Regular | 400 | Libra H2O |
+| georgiab.ttf | Georgia | Bold | 700 | Libra H2O |
+| georgiai.ttf | Georgia | Italic | 400 | Libra H2O |
+| georgiaz.ttf | Georgia | Bold Italic | 700 | Libra H2O |
 
 Filenames must match the firmware exactly. A wrong name adds a file instead
 of overwriting, and the stock font silently wins. Only change a filename or

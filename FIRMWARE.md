@@ -7,7 +7,8 @@ that produced it. Checked 2026-09-23.
 
 | Device (assumed) | Platform | Version | URL |
 |---|---|---|---|
-| Libra 2 | kobo9 | 4.38.23697 | `https://ereaderfiles.kobo.com/firmwares/kobo9/May2026/kobo-update-4.38.23697.zip` |
+| Libra H2O | kobo7 | 4.38.23697 | `https://ereaderfiles.kobo.com/firmwares/kobo7/May2026/kobo-update-4.38.23697.zip` |
+| (Libra 2, reference) | kobo9 | 4.38.23697 | `https://ereaderfiles.kobo.com/firmwares/kobo9/May2026/kobo-update-4.38.23697.zip` |
 | Clara BW | kobo12 | 4.45.23697 | `https://ereaderfiles.kobo.com/firmwares/kobo12/May2026/kobo-update-4.45.23697.zip` |
 
 URLs from Kobo's update API:
@@ -16,9 +17,18 @@ URLs from Kobo's update API:
 curl -sS "https://api.kobobooks.com/1.0/UpgradeCheck/Device/00000000-0000-0000-0000-000000000<ID>/kobo/4.0.0/N0"
 ```
 
-Assumption: device ID 388 → kobo9 = Libra 2, 391 → kobo12 = Clara BW. Not
-confirmed. Check yours under Settings → Device information: the firmware
-version should start with 4.38 (Libra 2) or 4.45 (Clara BW).
+Libra H2O: user confirmed firmware 4.38.23697; the kobo7 zip contains
+`zImage-E70K00` (Libra H2O board, assumed). Clara BW → kobo12 is an
+assumption; confirm the version under Settings → Device information (should
+start with 4.45).
+
+The Libra 2 (kobo9) zip was checked first by mistake. Its 16 UI font files
+are byte-identical to Libra H2O's:
+
+```sh
+# per file: compare sha256 of kobo9 and kobo7 copies → all 16 "same"
+[ "$(sha256sum < kobo9/$f)" = "$(sha256sum < kobo7/$f)" ] && echo same
+```
 
 ## Font directory listing
 
@@ -29,7 +39,7 @@ tar -tzf KoboRoot.tgz | grep 'QtEmbedded-4.6.2-arm/lib/fonts/'
 
 UI font files present:
 
-| File | Libra 2 | Clara BW |
+| File | Libra H2O | Clara BW |
 |---|---|---|
 | RakutenSansUIApp-{Regular,Bold,Italic,BoldItalic}.ttf | yes | yes |
 | RakutenSerifApp-{Regular,Bold,Italic,BoldItalic}.ttf | yes | yes |
@@ -38,7 +48,8 @@ UI font files present:
 
 - Sans bold-italic is `RakutenSansUIApp-BoldItalic.ttf`. `BoldItali` was a
   typo.
-- The 8 Rakuten files are byte-identical on both devices:
+- The 8 Rakuten files are byte-identical on Clara BW and Libra 2 (and so
+  Libra H2O):
   `sha256sum */Rakuten* | awk '{print $1}' | sort | uniq -c` → 8 hashes,
   each seen twice.
 
@@ -97,7 +108,7 @@ strings -n 4 usr/local/Kobo/libnickel.so.1.0.0 | grep -iE 'georgia|avenir'
 strings -n 4 usr/local/Kobo/nickel | grep -iE 'georgia|avenir'
 ```
 
-Libra 2 4.38: `Avenir Next`, `Avenir.ttf`, and `font-family: Avenir;` /
+Libra 2 4.38 (same fonts as Libra H2O): `Avenir Next`, `Avenir.ttf`, and `font-family: Avenir;` /
 `font-family: Georgia;` in embedded HTML/CSS (e.g. "What's new" text).
 `Rakuten` does not appear as a plain string. Its stylesheet is probably
 stored compressed. Not investigated (we don't patch nickel).

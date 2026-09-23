@@ -18,16 +18,16 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 - [ ] **B2. Ship the Avenir/Georgia files?**
   Facts (`FIRMWARE.md`): Clara BW firmware doesn't contain them at all;
-  Libra 2 does. Nickel uses `font-family: Georgia` / `Avenir` in some
+  Libra H2O does. Nickel uses `font-family: Georgia` / `Avenir` in some
   built-in HTML (e.g. "What's new" pages). Unknown whether they are also
   reading-font choices for book text, which is out of scope.
   Options:
   - (a) Ship only the 8 Rakuten files. Same tgz works on both devices, adds
-    nothing to Clara BW. Legacy pages on Libra 2 may still show boxes.
+    nothing to Clara BW. Legacy pages on Libra H2O may still show boxes.
   - (b) Ship all 16. On Clara BW this *adds* two new families instead of
     replacing anything.
   - (c) Two tgz files, one per device.
-  Recommendation: (a) first, add Avenir/Georgia later only if a Libra 2
+  Recommendation: (a) first, add Avenir/Georgia later only if a Libra H2O
   screen still shows boxes.
   > Answer:
 
@@ -56,10 +56,9 @@ Resolve by writing the answer under the item and marking `[x]`.
   > Answer:
 
 - [ ] **W3. Device ↔ firmware mapping is assumed.**
-  Kobo API IDs 388 → kobo9 → 4.38.23697 (Libra 2) and 391 → kobo12 →
-  4.45.23697 (Clara BW). Confirm on your devices: Settings → Device
-  information → firmware version.
-  > Libra 2: … / Clara BW: …
+  Libra H2O confirmed by user: 4.38.23697 (kobo7). Clara BW assumed kobo12
+  → 4.45.23697. Confirm: Settings → Device information → firmware version.
+  > Libra H2O: 4.38.23697 ✔ / Clara BW: …
 
 - [ ] **W4. Device test (manual).** After first install, record:
   - menus / library titles show Vietnamese correctly (no boxes)
@@ -86,7 +85,7 @@ Resolve by writing the answer under the item and marking `[x]`.
 ## Resolved
 
 - [x] One source or separate serif? → One source for all families.
-- [x] Target devices? → Clara BW + Libra 2, recent firmware.
+- [x] Target devices? → Libra H2O (4.38.23697) + Clara BW 2024.
 - [x] Filenames and family names vs. stock firmware → verified, see
   `FIRMWARE.md`. `RakutenSansUIApp-BoldItali.ttf` was a typo; the real file
   is `RakutenSansUIApp-BoldItalic.ttf`. Avenir regular/italic are Medium/500.
