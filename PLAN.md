@@ -41,17 +41,17 @@ Git-ignored: `.venv/`, `build/`, `root/`, `KoboRoot.tgz`.
 ### 2. Build
 - [ ] `build.sh` — venv, verify → rebrand → verify, stage, clean, tar, list
 
-### 3. Real sources  `[!]` TODO B1, B2, B3
+### 3. Real sources  `[!]` TODO B1
 - [ ] User adds fonts to `sources/`
 - [ ] `./build.sh` passes
 
 ### 4. Docs + device test
 - [ ] README: what it is, font credit + license, install, test, uninstall,
       firmware-update note
-- [ ] User installs on device, records result in TODO W4
+- [ ] User installs on device, records result in TODO W3
 
 ## Done when
 
 `./build.sh` on a clean checkout produces `KoboRoot.tgz`, both verify passes
 are all PASS, `tar -tzf` lists exactly the target fonts under `usr/`, and the device
-test in TODO W4 is recorded.
+test in TODO W3 is recorded.

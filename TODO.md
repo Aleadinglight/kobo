@@ -16,51 +16,25 @@ Resolve by writing the answer under the item and marking `[x]`.
   tested before that.
   > Pending: user upload.
 
-- [ ] **B2. Ship the Avenir/Georgia files?**
-  Facts (`FIRMWARE.md`): Clara BW firmware doesn't contain them at all;
-  Libra H2O does. Nickel uses `font-family: Georgia` / `Avenir` in some
-  built-in HTML (e.g. "What's new" pages). Unknown whether they are also
-  reading-font choices for book text, which is out of scope.
-  Options:
-  - (a) Ship only the 8 Rakuten files. Same tgz works on both devices, adds
-    nothing to Clara BW. Legacy pages on Libra H2O may still show boxes.
-  - (b) Ship all 16. On Clara BW this *adds* two new families instead of
-    replacing anything.
-  - (c) Two tgz files, one per device.
-  Recommendation: (a) first, add Avenir/Georgia later only if a Libra H2O
-  screen still shows boxes.
-  > Answer:
-
-- [ ] **B3. Plain TTF or wrapped like stock?**
-  Stock fonts are `QTD` + length + zlib (`FIRMWARE.md`). Unknown whether
-  nickel also loads plain TTF at these paths. A previous build (believed to
-  be plain TTF) did change the UI, which suggests plain works, but that
-  hasn't been verified.
-  Options: (a) plain TTF; (b) wrap outputs the same way as stock (easy:
-  `b"QTD" + len.to_bytes(4,"big") + zlib.compress(ttf)`).
-  Recommendation: build both variants; test plain first on device. If it
-  works, keep plain (simpler).
-  > Answer:
-
 ## Warning
 
-- [ ] **W1. Avenir regular weight is Medium/500, not Regular/400.**
-  Only matters if B2 ships Avenir. Plan: label the output "Medium", weight
-  500, using the Regular source outlines, to mirror stock.
-
-- [ ] **W2. "No source name in name table" vs. license text.**
-  Copyright (ID 0) and license (ID 13) usually name the source font. Plan:
-  rewrite those to drop the source name, keep license URL (ID 14), ship the
-  license file + real font name in README. Renaming a modified OFL font is
-  what the OFL asks for, so this should be compliant. Confirm.
+- [ ] **W1. Font file format on the device** (default chosen, confirm on
+  device).
+  Kobo's own fonts are stored compressed with a small header, not as normal
+  `.ttf` files. We don't know for sure whether the Kobo also reads a normal
+  `.ttf` placed there. Most likely yes, since your earlier build changed the
+  UI.
+  Default: ship normal `.ttf`. `build.sh` can also produce a compressed
+  version (same format as Kobo's). Use it only if the normal one shows no
+  change on the device.
   > Answer:
 
-- [ ] **W3. Device ↔ firmware mapping is assumed.**
+- [ ] **W2. Clara BW firmware version mapping is assumed.**
   Libra H2O confirmed by user: 4.38.23697 (kobo7). Clara BW assumed kobo12
   → 4.45.23697. Confirm: Settings → Device information → firmware version.
   > Libra H2O: 4.38.23697 ✔ / Clara BW: …
 
-- [ ] **W4. Device test (manual).** After first install, record:
+- [ ] **W3. Device test (manual).** After first install, record:
   - menus / library titles show Vietnamese correctly (no boxes)
   - UI text is not bold
   - device model + firmware version
@@ -86,6 +60,13 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 - [x] One source or separate serif? → One source for all families.
 - [x] Target devices? → Libra H2O (4.38.23697) + Clara BW 2024.
+- [x] Ship Avenir/Georgia? → Yes, all 16 files, one tgz for both devices.
+  On Clara BW the 8 legacy files are simply extra and unused.
+- [x] Avenir regular/italic → labelled Medium / Medium Italic, weight 500,
+  to mirror stock.
+- [x] Source name vs. license text → fine. Source is a Google Fonts (OFL)
+  font; drop its name from the name table, ship the license file, name the
+  real font in README.
 - [x] Filenames and family names vs. stock firmware → verified, see
   `FIRMWARE.md`. `RakutenSansUIApp-BoldItali.ttf` was a typo; the real file
   is `RakutenSansUIApp-BoldItalic.ttf`. Avenir regular/italic are Medium/500.

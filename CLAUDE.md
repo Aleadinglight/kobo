@@ -76,7 +76,8 @@ Filenames must match the firmware exactly. A wrong name adds a file instead
 of overwriting, and the stock font silently wins. Only change a filename or
 name based on a firmware listing, never by guessing.
 
-Whether to ship the Avenir/Georgia rows is open (`TODO.md` B2).
+Ship all 16 in one tgz for both devices. On Clara BW the Avenir/Georgia
+files are extra and unused.
 
 ## Verification (gates the build)
 
@@ -135,3 +136,5 @@ wrong-weight source gives a uniformly bold UI while everything else passes.
 4. Commit sources, scripts and docs. Don't commit `.venv/`, `build/`,
    `root/`, or `KoboRoot.tgz` (release decision tracked in `TODO.md`).
 5. Keep scripts small, standard-library + fonttools only.
+6. Focus on shipping. Only raise issues that would break the build or the
+   result on the device; skip out-of-scope or hypothetical concerns.
