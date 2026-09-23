@@ -10,9 +10,9 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 ## Breaking
 
-- [ ] **B1. Source font files.**
-  User will add 4 static TTFs (Regular, Bold, Italic, BoldItalic) + license
-  to `sources/`. Blocks the first real build; all scripts can be written and
+- [ ] **B1. Source font zip.**
+  User drops the Google Fonts family zip ("Download family") into
+  `sources/`. Blocks the first real build; everything else is built and
   tested before that.
   > Pending: user upload.
 
@@ -34,16 +34,13 @@ Resolve by writing the answer under the item and marking `[x]`.
 - [ ] **I1. Match stock metrics.** Stock Rakuten fonts set USE_TYPO_METRICS
   (fsSelection 0x80). If the new font's line height clips or shifts the UI,
   copy vertical metrics from stock. Only if the device test shows problems.
-- [ ] **I2. Distribute `KoboRoot.tgz` how?** Default: not committed; attach
-  to a GitHub Release.
-- [ ] **I3. CI build** — GitHub Actions runs `./build.sh`, uploads the tgz.
-- [ ] **I4. Test EPUB** — tiny EPUB with a Vietnamese title, author and TOC,
+- [ ] **I2. Test EPUB** — tiny EPUB with a Vietnamese title, author and TOC,
   to check the UI quickly on device.
-- [ ] **I5. Render preview** — PNG of a Vietnamese sample line per output.
-- [ ] **I6. Firmware check script** — turn the `FIRMWARE.md` commands into
+- [ ] **I3. Render preview** — PNG of a Vietnamese sample line per output.
+- [ ] **I4. Firmware check script** — turn the `FIRMWARE.md` commands into
   `scripts/inspect_firmware.py`, to re-run after future firmware updates.
-- [ ] **I7. Old bold tgz** — if found, run it through the same inspection.
-- [ ] **I8. Dictionary** — separate install, out of scope.
+- [ ] **I5. Old bold tgz** — if found, run it through the same inspection.
+- [ ] **I6. Dictionary** — separate install, out of scope.
 
 ## Resolved
 
@@ -56,6 +53,9 @@ Resolve by writing the answer under the item and marking `[x]`.
 - [x] Source name vs. license text → fine. Source is a Google Fonts (OFL)
   font; drop its name from the name table, ship the license file, name the
   real font in README.
+- [x] Build approach → one `build.py`, Python 3 only, fonttools bundled as a
+  wheel in `vendor/` (no venv, pip, internet or OS scripts).
+- [x] Distribution → GitHub Actions builds and publishes a Release.
 - [x] Plain TTF or wrapped like stock? → Plain TTF. Assumption based on the
   user's earlier build and the reference payload, both plain TTF, which
   changed the UI on device.

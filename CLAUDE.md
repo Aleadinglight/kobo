@@ -42,11 +42,13 @@ nickel process. We don't touch reading fonts.
 
 ## Source font
 
-- One font family, 4 static TTFs (Regular, Bold, Italic, BoldItalic) plus its
-  license, committed in `sources/`. Provided by the user.
+- The user drops **one file** in `sources/`: the family zip from Google Fonts
+  ("Download family"). The build picks the 4 static styles (Regular, Bold,
+  Italic, BoldItalic) and `OFL.txt` out of it, and ignores the variable
+  fonts.
 - The same source feeds every target family. Rakuten Sans and Rakuten Serif
-  (and Avenir / Georgia, if shipped) end up identical — intended.
-- Code must not hardcode the source's name; read it from the source files.
+  (and Avenir / Georgia) end up identical — intended.
+- Code must not hardcode the source's name; read it from the font files.
 - README names the real font and ships its license, even though the internal
   name is rewritten.
 
@@ -108,13 +110,22 @@ wrong-weight source gives a uniformly bold UI while everything else passes.
 
 ## Build
 
-`./build.sh` is the only entry point. It:
+One command, same on every OS: `python3 build.py` (Windows: `py build.py`).
+Only prerequisite: Python 3. No venv, no pip, no internet, no OS-specific
+scripts.
 
-1. creates `.venv/` with fonttools (no system pip, no sudo; no manual activate)
-2. verifies sources → rebrands → verifies outputs
-3. stages under `root/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
-4. removes `.DS_Store` / `._*`, runs `COPYFILE_DISABLE=1 tar -czf KoboRoot.tgz -C root usr`
-5. checks `tar -tzf`: every entry under `usr/`, exactly the target fonts, no junk
+- fonttools is bundled as `vendor/fonttools-<version>-py3-none-any.whl`
+  (official pure-Python wheel from PyPI, MIT). `build.py` puts it on
+  `sys.path` and imports from it directly.
+- Pipeline: find the zip in `sources/` → extract the 4 styles → verify
+  sources → rebrand to the 16 targets → verify outputs → write
+  `KoboRoot.tgz` with Python's `tarfile`.
+- The tgz: every entry under `usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`,
+  exactly the 16 target files, owner root, mode 0644, no `.DS_Store` / `._*`.
+  Read it back after writing and check this.
+- Output: clear ✅ with the tgz path, or ❌ with a plain-language reason.
+- GitHub Actions runs the same `build.py` on push and publishes `KoboRoot.tgz`
+  as a GitHub Release. Most users just download it from there.
 
 ## Known limits
 
@@ -135,8 +146,9 @@ wrong-weight source gives a uniformly bold UI while everything else passes.
    `TODO.md`.
 3. Unclear decisions go in `TODO.md`, not in guesses. Don't build past a
    Breaking item that blocks the step.
-4. Commit sources, scripts and docs. Don't commit `.venv/`, `build/`,
-   `root/`, or `KoboRoot.tgz` (release decision tracked in `TODO.md`).
-5. Keep scripts small, standard-library + fonttools only.
+4. Commit sources, scripts, the vendored wheel and docs. Don't commit
+   `build/` or `KoboRoot.tgz`; releases carry the tgz.
+5. Standard library + the vendored fonttools only. Never add a dependency
+   that needs installing.
 6. Focus on shipping. Only raise issues that would break the build or the
    result on the device; skip out-of-scope or hypothetical concerns.
