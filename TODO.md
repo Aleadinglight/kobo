@@ -42,6 +42,12 @@ _None._
   No tgz needed; nickel reads both paths (`strings libnickel.so.1.0.0 |
   grep -E '/mnt/onboard/fonts|\.kobo/screensaver'`, Libra H2O + Clara BW).
   After the UI font build ships.
+- [ ] **I8. Custom bookmark (dog-ear) icon** — separate project, later.
+  The icon is not a file on the device: it's a Qt resource compiled into
+  libnickel (`strings libnickel.so.1.0.0 | grep dogear` →
+  `:/images/dogear/dogear.png`, `:/images/book/AnnotationsList_icon_dogear.png`,
+  both firmwares). Changing it means patching libnickel per firmware version
+  (kobopatch-style), which this project's rules exclude.
 
 ## Resolved
 
