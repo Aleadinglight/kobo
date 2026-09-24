@@ -41,6 +41,11 @@ Resolve by writing the answer under the item and marking `[x]`.
   `scripts/inspect_firmware.py`, to re-run after future firmware updates.
 - [ ] **I5. Old bold tgz** — if found, run it through the same inspection.
 - [ ] **I6. Dictionary** — separate install, out of scope.
+- [ ] **I7. `kobo-drive.zip` release extra** — reading fonts in `fonts/` and
+  sleep images in `.kobo/screensaver/`, laid out like the Kobo USB drive.
+  No tgz needed; nickel reads both paths (`strings libnickel.so.1.0.0 |
+  grep -E '/mnt/onboard/fonts|\.kobo/screensaver'`, Libra H2O + Clara BW).
+  After the UI font build ships.
 
 ## Resolved
 
