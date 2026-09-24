@@ -10,18 +10,17 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 kobo/
 ├── CLAUDE.md  PLAN.md  TODO.md  FIRMWARE.md  README.md
 ├── build.py                    # the one command
-├── sources/                    # user drops the Google Fonts zip here
+├── sources/                    # Noto Sans 4 static TTFs + OFL.txt
 ├── vendor/
-│   └── fonttools-4.65.0-py3-none-any.whl
+│   └── fonttools-4.60.2-py3-none-any.whl
 ├── scripts/
 │   ├── targets.py              # 16-row table
-│   ├── fontsource.py           # find zip, pick 4 static styles + OFL.txt
-│   ├── verify.py               # source + output checks
-│   └── rebrand.py              # rewrite name table
-└── .github/workflows/build.yml # build + publish Release
+│   ├── fonts.py                # pick source styles, rebrand
+│   └── verify.py               # source + output checks
+└── .github/workflows/build.yml # build on 3 OS × 2 Pythons, publish Release
 ```
 
-Git-ignored: `build/`, `KoboRoot.tgz`.
+Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 
 ## Phases
 
@@ -30,33 +29,28 @@ Git-ignored: `build/`, `KoboRoot.tgz`.
 - [x] Verify target filenames/names against firmware → `FIRMWARE.md`
 - [x] Decide build approach → single `build.py`, bundled fonttools
 
-### 1. Scripts (no real font needed)
-- [ ] `.gitignore`, `vendor/` wheel, `sources/README.md`
-- [ ] `targets.py`
-- [ ] `fontsource.py` — pick styles by `usWeightClass` + italic bit from the
-      zip's static fonts; clear error if a style is missing or ambiguous
-- [ ] `verify.py` — checks from CLAUDE.md, one line per failure
-- [ ] `rebrand.py` — name IDs 1, 2, 3, 4, 6, 16, 17 (21/22 if present);
-      drop the source name elsewhere; weight per target table
-- [ ] `build.py` — pipeline + tgz with `tarfile` + read-back check
-- [ ] Test with a throwaway zip (built from an open font) that the checks
-      both pass and fail as expected
+### 1. Build
+- [x] `targets.py`, `fonts.py`, `verify.py`, `build.py`, `.gitignore`
+- [x] Source font in `sources/`
+- [x] `python3 build.py` passes; tgz read back with GNU tar and a separate
+      fonttools install
+- [x] Every check fails when it should (wrong weight / italic / bold flag,
+      variable only, missing style, missing Vietnamese, filename typo,
+      source-name leak, Regular in a Bold slot); Google zip layout picked
+      correctly — scratch test, not committed
+- [x] Same tgz hash on Python 3.9, 3.10, 3.11, 3.13 (Linux)
 
 ### 2. CI + release
-- [ ] GitHub Actions: run `build.py` on push to `sources/` or scripts,
-      upload tgz, publish Release
+- [x] Workflow: build on ubuntu/macos/windows × Python 3.9/3.13; release
+      on push to main
+- [ ] First CI run green (needs merge to main or a PR)
 
-### 3. Real font  `[!]` TODO B1
-- [ ] User adds the Google Fonts zip to `sources/`
-- [ ] `python3 build.py` passes locally and in CI
-
-### 4. Docs + device test
-- [ ] README: what it is, download + install (Mac/Windows hidden `.kobo`),
-      how to build, font credit + license, undo, firmware-update note
+### 3. Docs + device test
+- [x] README: install (Mac/Windows hidden `.kobo`), build, font credit,
+      undo, firmware-update note
 - [ ] User installs on device, records result in TODO W2
 
 ## Done when
 
-`python3 build.py` on a clean checkout produces `KoboRoot.tgz` with all
-checks passing, CI publishes the same as a Release, and the device test in
-TODO W2 is recorded.
+CI is green on all 6 jobs, a Release with `KoboRoot.tgz` exists, and the
+device test in TODO W2 is recorded.

@@ -10,11 +10,7 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 ## Breaking
 
-- [ ] **B1. Source font zip.**
-  User drops the Google Fonts family zip ("Download family") into
-  `sources/`. Blocks the first real build; everything else is built and
-  tested before that.
-  > Pending: user upload.
+_None._
 
 ## Warning
 
@@ -49,6 +45,8 @@ Resolve by writing the answer under the item and marking `[x]`.
 
 ## Resolved
 
+- [x] Source font → Noto Sans v2.015 static, 4 styles + OFL.txt in
+  `sources/`, fetched from the Google Fonts manifest.
 - [x] One source or separate serif? → One source for all families.
 - [x] Target devices? → Libra H2O (4.38.23697) + Clara BW 2024.
 - [x] Ship Avenir/Georgia? → Yes, all 16 files, one tgz for both devices.

@@ -42,10 +42,11 @@ nickel process. We don't touch reading fonts.
 
 ## Source font
 
-- The user drops **one file** in `sources/`: the family zip from Google Fonts
-  ("Download family"). The build picks the 4 static styles (Regular, Bold,
-  Italic, BoldItalic) and `OFL.txt` out of it, and ignores the variable
-  fonts.
+- `sources/` holds only what the build needs: Noto Sans v2.015 static
+  Regular/Bold/Italic/BoldItalic `.ttf` + `OFL.txt` (from the Google Fonts
+  manifest). A Google Fonts family zip dropped there works too: the build
+  picks the normal-width RIBBI statics and ignores variable, other weights
+  and other widths (`scripts/fonts.py`).
 - The same source feeds every target family. Rakuten Sans and Rakuten Serif
   (and Avenir / Georgia) end up identical — intended.
 - Code must not hardcode the source's name; read it from the font files.
@@ -89,6 +90,7 @@ One script, two passes. Any failure stops the build.
 
 **Sources (before rebrand):**
 - `usWeightClass`: 400 Regular/Italic, 700 Bold/BoldItalic
+- Bold flag (fsSelection bit 5 + macStyle bit 0) on Bold styles only
 - 4 distinct file hashes
 - Italic bit set on italics, clear on uprights
 - Static: no `fvar` (variable fonts fail silently on Kobo; Google Fonts'
@@ -98,7 +100,9 @@ One script, two passes. Any failure stops the build.
 
 **Outputs (after rebrand):**
 - Exactly the filenames in the target table
-- Weight matches the table's Weight column; italic bit per target style
+- Weight matches the table's Weight column; italic and bold flags per
+  target style (the bold flag is what catches Regular outlines in a Bold
+  slot, since the weight number is rewritten)
 - Hashes differ across styles (same style may share a hash — same source)
 - Family/subfamily match the table
 - Source font name appears nowhere in the name table
@@ -111,18 +115,21 @@ wrong-weight source gives a uniformly bold UI while everything else passes.
 ## Build
 
 One command, same on every OS: `python3 build.py` (Windows: `py build.py`).
-Only prerequisite: Python 3. No venv, no pip, no internet, no OS-specific
-scripts.
+Only prerequisite: Python 3.9+. No venv, no pip, no internet, no
+OS-specific scripts.
 
-- fonttools is bundled as `vendor/fonttools-<version>-py3-none-any.whl`
-  (official pure-Python wheel from PyPI, MIT). `build.py` puts it on
-  `sys.path` and imports from it directly.
+- fonttools is bundled as `vendor/fonttools-4.60.2-py3-none-any.whl`
+  (official pure-Python wheel, sha256 matches PyPI, MIT). 4.60.2 is the
+  newest that supports Python 3.9, which is what macOS's command-line tools
+  ship. `build.py` puts it on `sys.path` and imports from it directly.
 - Pipeline: find the zip in `sources/` → extract the 4 styles → verify
   sources → rebrand to the 16 targets → verify outputs → write
-  `KoboRoot.tgz` with Python's `tarfile`.
-- The tgz: every entry under `usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`,
-  exactly the 16 target files, owner root, mode 0644, no `.DS_Store` / `._*`.
-  Read it back after writing and check this.
+  `build/KoboRoot.tgz` with Python's `tarfile`.
+- The tgz: exactly the 16 files under `usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`,
+  USTAR, owner root, mode 0644, **no directory entries** (extracting over `/`
+  must not touch existing directories). Read back after writing.
+- Reproducible: fixed mtimes, no font timestamp recalculation. Same hash on
+  Python 3.9–3.13.
 - Output: clear ✅ with the tgz path, or ❌ with a plain-language reason.
 - GitHub Actions runs the same `build.py` on push and publishes `KoboRoot.tgz`
   as a GitHub Release. Most users just download it from there.
@@ -147,7 +154,7 @@ scripts.
 3. Unclear decisions go in `TODO.md`, not in guesses. Don't build past a
    Breaking item that blocks the step.
 4. Commit sources, scripts, the vendored wheel and docs. Don't commit
-   `build/` or `KoboRoot.tgz`; releases carry the tgz.
+   `build/`; releases carry the tgz. Keep only what the product needs.
 5. Standard library + the vendored fonttools only. Never add a dependency
    that needs installing.
 6. Focus on shipping. Only raise issues that would break the build or the
