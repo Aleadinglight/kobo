@@ -46,7 +46,11 @@ the Kobo drive (next to `.kobo`, create it if missing), then eject. No
 
 4. Copy `build/KoboRoot.tgz` to the Kobo as in [Install](#install).
 
-### What the build does
+If your font isn't suitable, the build stops and says why.
+
+## FAQ
+
+**What does the build do?**
 
 1. Picks your font's Regular, Bold, Italic and Bold Italic from `sources/`
    and checks them (correct weights and styles, full Vietnamese coverage).
@@ -59,11 +63,13 @@ the Kobo drive (next to `.kobo`, create it if missing), then eject. No
 4. Packs them into `KoboRoot.tgz`, set to unpack into the Kobo's system font
    folder.
 
-If any check fails, it stops with a plain message saying what's wrong.
+**Which built-in book fonts already support Vietnamese?**
 
-## More
+See [docs/FIRMWARE.md](docs/FIRMWARE.md#built-in-reading-fonts-vietnamese-coverage).
+On Clara BW: Bitter, Noto Sans, Texturina, Vollkorn. On Libra H2O: none, so
+add your own.
 
-- [docs/FIRMWARE.md](docs/FIRMWARE.md): what the Kobo firmware contains, and
-  which built-in reading fonts cover Vietnamese
-- [docs/PLAN.md](docs/PLAN.md), [docs/TODO.md](docs/TODO.md): project
-  progress and open items
+**Where are the technical details and project status?**
+
+[docs/FIRMWARE.md](docs/FIRMWARE.md) (what the Kobo firmware contains),
+[docs/PLAN.md](docs/PLAN.md) and [docs/TODO.md](docs/TODO.md).
