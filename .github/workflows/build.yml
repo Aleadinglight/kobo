@@ -1,0 +1,33 @@
+name: Build KoboRoot.tgz
+
+on:
+  push:
+    branches: [main]
+    paths: [sources/**, scripts/**, vendor/**, build.py, docs/INSTALL.md, .github/workflows/build.yml]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KoboRoot
+          path: build/KoboRoot.tgz
+      - name: Publish release
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "build-${{ github.run_number }}" build/KoboRoot.tgz \
+            --title "Vietnamese Kobo UI fonts (build ${{ github.run_number }})" \
+            --notes-file docs/INSTALL.md
