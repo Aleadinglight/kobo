@@ -18,7 +18,7 @@ kobo/
 │   ├── targets.py              # 16-row table
 │   ├── fonts.py                # pick source styles, rebrand
 │   └── verify.py               # source + output checks
-└── .github/workflows/build.yml # build on 3 OS × 2 Pythons, publish Release
+└── .github/workflows/build.yml # build on GitHub, publish Release
 ```
 
 Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
@@ -42,8 +42,7 @@ Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 - [x] Same tgz hash on Python 3.9, 3.10, 3.11, 3.13 (Linux)
 
 ### 2. CI + release
-- [x] Workflow: build on ubuntu/macos/windows × Python 3.9/3.13; release
-      on push to main
+- [x] Workflow: one Linux job builds; on main it also publishes a Release
 - [ ] First CI run green (needs merge to main or a PR)
 
 ### 3. Docs + device test
@@ -54,5 +53,5 @@ Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 
 ## Done when
 
-CI is green on all 6 jobs, a Release with `KoboRoot.tgz` exists, and the
+CI is green, a Release with `KoboRoot.tgz` exists, and the
 device test in TODO W2 is recorded.

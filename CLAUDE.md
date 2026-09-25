@@ -131,8 +131,9 @@ OS-specific scripts.
 - Reproducible: fixed mtimes, no font timestamp recalculation. Same hash on
   Python 3.9–3.13.
 - Output: clear ✅ with the tgz path, or ❌ with a plain-language reason.
-- GitHub Actions runs the same `build.py` on push and publishes `KoboRoot.tgz`
-  as a GitHub Release. Most users just download it from there.
+- GitHub Actions (one Linux job) runs the same `build.py` on PRs and on
+  push to `main`; on `main` it publishes `KoboRoot.tgz` as a GitHub Release
+  with `docs/INSTALL.md` as the notes. Most users just download it.
 
 ## Known limits
 
