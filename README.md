@@ -17,10 +17,11 @@ Tested on **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 
 1. Download `KoboRoot.tgz` from the latest
    [Release](https://github.com/Aleadinglight/kobo/releases/latest).
-2. Copy it into the hidden `.kobo` folder on the Kobo drive.
+2. Copy it into the hidden `.kobo` folder on the Kobo drive
+   (`KOBOeReader/.kobo/KoboRoot.tgz`).
 3. Eject. The Kobo updates and restarts.
 
-Full guide (Mac/Windows steps, checking it worked, troubleshooting, undo):
+Step-by-step with Mac/Windows tips and troubleshooting:
 **[docs/INSTALL.md](docs/INSTALL.md)**.
 
 ## Custom book fonts
