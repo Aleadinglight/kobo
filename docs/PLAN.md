@@ -11,7 +11,7 @@ kobo/
 ├── README.md
 ├── .claude/CLAUDE.md           # project rules for Claude
 ├── docs/
-│   ├── INSTALL.md              # user guide, also the Release notes
+│   ├── INSTALL.md              # full user guide
 │   ├── PLAN.md  TODO.md        # progress and open questions
 │   └── FIRMWARE.md             # what stock firmware contains
 ├── build.py                    # the one command
@@ -51,8 +51,8 @@ Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 
 ### 3. Docs + device test
 - [x] README: short install, reading fonts, use your own font; docs in `docs/`
-- [x] `docs/INSTALL.md`: full install, check, troubleshooting, undo; used
-      as Release notes
+- [x] `docs/INSTALL.md`: full install, check, troubleshooting, undo
+- [x] `.github/release-notes.md`: 4-step Release notes
 - [ ] User installs on device, records result in TODO W2
 
 ## Done when

@@ -134,7 +134,7 @@ OS-specific scripts.
 - Output: clear ✅ with the tgz path, or ❌ with a plain-language reason.
 - GitHub Actions (one Linux job) runs the same `build.py` on PRs and on
   push to `main`; on `main` it publishes `KoboRoot.tgz` as a GitHub Release
-  with `docs/INSTALL.md` as the notes. Most users just download it.
+  with `.github/release-notes.md` as the notes (4 steps only). Most users just download it.
 
 ## Known limits
 

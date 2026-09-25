@@ -3,7 +3,7 @@ name: Build KoboRoot.tgz
 on:
   push:
     branches: [main]
-    paths: [sources/**, scripts/**, vendor/**, build.py, docs/INSTALL.md, .github/workflows/build.yml]
+    paths: [sources/**, scripts/**, vendor/**, build.py, .github/release-notes.md, .github/workflows/build.yml]
   pull_request:
   workflow_dispatch:
 
@@ -29,5 +29,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "build-${{ github.run_number }}" build/KoboRoot.tgz \
-            --title "Vietnamese Kobo UI fonts (build ${{ github.run_number }})" \
-            --notes-file docs/INSTALL.md
+            --title "Build ${{ github.run_number }}" \
+            --notes-file .github/release-notes.md
