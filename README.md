@@ -9,12 +9,12 @@ reading progress. With the stock font, Vietnamese there shows as boxes or
 broken accents.
 
 It does **not** change the **book font** (the text inside a book). That's a
-separate reading font you choose yourself; see [Reading fonts](#reading-fonts).
+separate reading font you choose yourself; see [Custom book fonts](#custom-book-fonts).
 
 Tested on **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 (firmware 4.45).
 
-## Install
+## Installation
 
 1. Download `KoboRoot.tgz` from the latest
    [Release](https://github.com/Aleadinglight/kobo/releases/latest).
@@ -24,13 +24,17 @@ Tested on **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 Full guide (Mac/Windows steps, checking it worked, troubleshooting, undo):
 **[docs/INSTALL.md](docs/INSTALL.md)**.
 
-## Reading fonts
+## Custom book fonts
 
-This project changes the system UI font only. The **book font** is chosen
-by you in the **Aa** menu while reading. Pick one that supports Vietnamese,
-or add your own: copy its `.ttf` files into the `fonts` folder at the top of
-the Kobo drive (next to `.kobo`, create it if missing), then eject. No
-`KoboRoot.tgz` needed.
+This project doesn't change the book font. To add your own book font:
+
+1. Download a Vietnamese-capable font, e.g.
+   [Literata](https://fonts.google.com/specimen/Literata) or
+   [Noto Serif](https://fonts.google.com/noto/specimen/Noto+Serif) from
+   Google Fonts. Use the static `.ttf` files.
+2. Copy them into the `fonts` folder at the top of the Kobo drive (next to
+   `.kobo`; create it if it's missing).
+3. Eject.
 
 ## Use your own font
 
@@ -44,7 +48,7 @@ the Kobo drive (next to `.kobo`, create it if missing), then eject. No
    python3 build.py        # Windows: py build.py
    ```
 
-4. Copy `build/KoboRoot.tgz` to the Kobo as in [Install](#install).
+4. Copy `build/KoboRoot.tgz` to the Kobo as in [Installation](#installation).
 
 If your font isn't suitable, the build stops and says why.
 

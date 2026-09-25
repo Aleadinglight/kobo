@@ -1,4 +1,4 @@
-# Install guide: Vietnamese UI fonts for Kobo
+# Installation guide: Vietnamese system UI font for Kobo
 
 `KoboRoot.tgz` replaces the Kobo's **system UI font** (the font of the
 Kobo's own screens: library, book titles, menus, settings, table of
@@ -56,7 +56,7 @@ The Kobo shows an update screen and restarts. This takes about a minute.
 |---|---|
 | No update screen, nothing changed | The file wasn't found. Check it's named exactly `KoboRoot.tgz` and is inside `.kobo`, not next to it. Then eject properly. |
 | `KoboRoot.tgz` is still in `.kobo` after restart | Same as above: wrong name or location, or the Kobo wasn't ejected before unplugging. |
-| Menus are fine, but the **book text** has boxes | That's the book font, not the system UI font. Pick a reading font that covers Vietnamese in the **Aa** menu, or add one: copy its `.ttf` files into the `fonts` folder at the top of the Kobo drive (next to `.kobo`). See [README](https://github.com/Aleadinglight/kobo#reading-fonts). |
+| Menus are fine, but the **book text** has boxes | That's the book font, not the system UI font. Pick a reading font that covers Vietnamese in the **Aa** menu, or add one: copy its `.ttf` files into the `fonts` folder at the top of the Kobo drive (next to `.kobo`). See [README](https://github.com/Aleadinglight/kobo#custom-book-fonts). |
 | UI text looks bold | Please [open an issue](https://github.com/Aleadinglight/kobo/issues) with your model, firmware version and a photo. |
 
 ## After a Kobo firmware update
