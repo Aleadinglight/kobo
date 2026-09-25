@@ -28,6 +28,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "build-${{ github.run_number }}" build/KoboRoot.tgz \
-            --title "Build ${{ github.run_number }}" \
+          # Keep a single release: remove all old ones (and their tags) first.
+          gh release list --limit 100 --json tagName --jq '.[].tagName' |
+            xargs -r -n1 gh release delete --yes --cleanup-tag
+          gh release create latest build/KoboRoot.tgz \
+            --title "Latest" \
             --notes-file docs/INSTALL.md
