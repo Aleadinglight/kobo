@@ -20,7 +20,7 @@ Tested on **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 2. Copy it into the hidden `.kobo` folder on the Kobo drive.
 3. Eject. The Kobo updates and restarts.
 
-Full guide (Mac/Windows steps, checking it worked, troubleshooting, undo):
+Full guide (Mac/Windows steps, troubleshooting, undo):
 **[docs/INSTALL.md](docs/INSTALL.md)**.
 
 ## Custom book fonts

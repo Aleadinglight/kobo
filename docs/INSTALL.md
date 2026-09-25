@@ -41,15 +41,6 @@ Download `KoboRoot.tgz` from the
 
 The Kobo shows an update screen and restarts. This takes about a minute.
 
-## 3. Check it worked
-
-- Book titles and authors with Vietnamese accents display correctly in the
-  library, e.g. *Truyện Kiều*, *Nguyễn Du*.
-- Menus and the table of contents show no boxes (□) or broken accents.
-- UI text looks normal weight, not bold.
-- Connect the Kobo again: `.kobo/KoboRoot.tgz` is gone. The Kobo deletes it
-  after installing.
-
 ## Troubleshooting
 
 | Problem | Fix |
