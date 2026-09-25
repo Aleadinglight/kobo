@@ -5,8 +5,7 @@ Replaces the Kobo's **system UI font** with
 ([SIL Open Font License](sources/OFL.txt)), which covers every Vietnamese
 letter. The system UI font is the one the Kobo uses for its own screens:
 library, book titles and authors, menus, settings, table of contents,
-reading progress. With the stock font, Vietnamese there shows as boxes or
-broken accents.
+reading progress.
 
 It does **not** change the **book font** (the text inside a book). That's a
 separate reading font you choose yourself; see [Custom book fonts](#custom-book-fonts).
