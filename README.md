@@ -1,11 +1,15 @@
-# Vietnamese UI fonts for Kobo
+# Vietnamese system UI font for Kobo
 
-Makes the Kobo interface (library, book titles, menus, table of contents,
-reading progress) show Vietnamese correctly instead of boxes or broken
-accents. It replaces the Kobo's UI fonts with
+Replaces the Kobo's **system UI font** with
 [Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans)
 ([SIL Open Font License](sources/OFL.txt)), which covers every Vietnamese
-letter. Your books and reading-font choice are not touched.
+letter. The system UI font is the one the Kobo uses for its own screens:
+library, book titles and authors, menus, settings, table of contents,
+reading progress. With the stock font, Vietnamese there shows as boxes or
+broken accents.
+
+It does **not** change the **book font** (the text inside a book). That's a
+separate reading font you choose yourself; see [Reading fonts](#reading-fonts).
 
 Tested on **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 (firmware 4.45).
@@ -22,10 +26,11 @@ Full guide (Mac/Windows steps, checking it worked, troubleshooting, undo):
 
 ## Reading fonts
 
-This project only changes the interface. For **book text**, pick a reading
-font that supports Vietnamese in the **Aa** menu, or add your own: copy its
-`.ttf` files into the `fonts` folder at the top of the Kobo drive (next to
-`.kobo`, create it if missing), then eject. No `KoboRoot.tgz` needed.
+This project changes the system UI font only. The **book font** is chosen
+by you in the **Aa** menu while reading. Pick one that supports Vietnamese,
+or add your own: copy its `.ttf` files into the `fonts` folder at the top of
+the Kobo drive (next to `.kobo`, create it if missing), then eject. No
+`KoboRoot.tgz` needed.
 
 ## Use your own font
 

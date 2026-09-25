@@ -1,8 +1,9 @@
 # CLAUDE.md
 
-Builds `KoboRoot.tgz`: a patch that replaces the Kobo system UI fonts with a
-Vietnamese-capable font, so the interface (titles, menus, progress, TOC)
-renders Vietnamese.
+Builds `KoboRoot.tgz`: a patch that replaces the Kobo **system UI font** (the
+font of the Kobo's own screens: titles, menus, progress, TOC) with a
+Vietnamese-capable font. In user docs say "system UI font" vs "book font",
+not "interface".
 
 Out of scope: book text (use normal sideloaded fonts), UI translation,
 dictionaries, patching libnickel or its stylesheets.
