@@ -34,6 +34,7 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: KoboRoot
@@ -44,4 +45,4 @@ jobs:
           gh release create "build-${{ github.run_number }}" KoboRoot.tgz \
             --repo "${{ github.repository }}" \
             --title "Vietnamese Kobo UI fonts (build ${{ github.run_number }})" \
-            --notes "Copy KoboRoot.tgz into the .kobo folder on your Kobo, eject, and let it restart. See README."
+            --notes-file docs/INSTALL.md

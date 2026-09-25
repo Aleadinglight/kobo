@@ -1,4 +1,4 @@
-# Kobo tiếng Việt: Vietnamese UI fonts for Kobo
+# Vietnamese UI fonts for Kobo
 
 Makes the Kobo interface (library, book titles, menus, table of contents,
 reading progress) show Vietnamese correctly instead of boxes or broken
@@ -51,18 +51,11 @@ updates.
 
 1. Download `KoboRoot.tgz` from the latest
    [Release](https://github.com/Aleadinglight/kobo/releases/latest).
-2. Connect the Kobo to your computer with USB and tap **Connect**.
-3. Open the Kobo drive and show hidden files so the `.kobo` folder appears:
-   - **Mac:** in Finder press `Cmd + Shift + .`
-   - **Windows:** File Explorer → **View** → **Show** → **Hidden items**
-4. Copy `KoboRoot.tgz` into the `.kobo` folder. Don't rename it.
-5. Eject the Kobo and unplug it. It shows an update screen and restarts.
+2. Copy it into the hidden `.kobo` folder on the Kobo drive.
+3. Eject. The Kobo updates and restarts.
 
-After a Kobo firmware update the original fonts come back. Just repeat the
-steps with the same `KoboRoot.tgz`.
-
-**Undo:** install the official firmware again (Kobo's "manual update"
-instructions), or wait for the next firmware update.
+Full guide with Mac/Windows steps, how to check it worked, troubleshooting
+and undo: **[docs/INSTALL.md](docs/INSTALL.md)**.
 
 ## Build it yourself
 

@@ -9,6 +9,7 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 ```
 kobo/
 ├── CLAUDE.md  PLAN.md  TODO.md  FIRMWARE.md  README.md
+├── docs/INSTALL.md             # user guide, also the Release notes
 ├── build.py                    # the one command
 ├── sources/                    # Noto Sans 4 static TTFs + OFL.txt
 ├── vendor/
@@ -46,8 +47,9 @@ Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 - [ ] First CI run green (needs merge to main or a PR)
 
 ### 3. Docs + device test
-- [x] README: install (Mac/Windows hidden `.kobo`), build, font credit,
-      undo, firmware-update note
+- [x] README: UI vs reading fonts, short install, build, font credit
+- [x] `docs/INSTALL.md`: full install, check, troubleshooting, undo; used
+      as Release notes
 - [ ] User installs on device, records result in TODO W2
 
 ## Done when
