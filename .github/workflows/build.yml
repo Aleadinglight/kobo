@@ -3,7 +3,7 @@ name: Build KoboRoot.tgz
 on:
   push:
     branches: [main]
-    paths: [sources/**, scripts/**, vendor/**, build.py, .github/release-notes.md, .github/workflows/build.yml]
+    paths: [sources/**, scripts/**, vendor/**, build.py, docs/INSTALL.md, .github/workflows/build.yml]
   pull_request:
   workflow_dispatch:
 
@@ -30,4 +30,4 @@ jobs:
         run: |
           gh release create "build-${{ github.run_number }}" build/KoboRoot.tgz \
             --title "Build ${{ github.run_number }}" \
-            --notes-file .github/release-notes.md
+            --notes-file docs/INSTALL.md
