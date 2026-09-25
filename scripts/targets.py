@@ -1,4 +1,4 @@
-"""The 16 stock UI font files we replace. Verified against firmware: FIRMWARE.md."""
+"""The 16 stock UI font files we replace. Verified against firmware: docs/FIRMWARE.md."""
 
 FONT_DIR = "usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts"
 

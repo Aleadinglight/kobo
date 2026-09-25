@@ -1,6 +1,6 @@
 # PLAN.md
 
-Plan and progress. Rules: `CLAUDE.md`. Questions: `TODO.md`.
+Plan and progress. Rules: `.claude/CLAUDE.md`. Questions: `docs/TODO.md`.
 
 Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 
@@ -8,8 +8,12 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 
 ```
 kobo/
-├── CLAUDE.md  PLAN.md  TODO.md  FIRMWARE.md  README.md
-├── docs/INSTALL.md             # user guide, also the Release notes
+├── README.md
+├── .claude/CLAUDE.md           # project rules for Claude
+├── docs/
+│   ├── INSTALL.md              # user guide, also the Release notes
+│   ├── PLAN.md  TODO.md        # progress and open questions
+│   └── FIRMWARE.md             # what stock firmware contains
 ├── build.py                    # the one command
 ├── sources/                    # Noto Sans 4 static TTFs + OFL.txt
 ├── vendor/
@@ -46,7 +50,7 @@ Git-ignored: `build/` (fonts + `KoboRoot.tgz`).
 - [ ] First CI run green (needs merge to main or a PR)
 
 ### 3. Docs + device test
-- [x] README: UI vs reading fonts, short install, build, font credit
+- [x] README: short install, reading fonts, use your own font; docs in `docs/`
 - [x] `docs/INSTALL.md`: full install, check, troubleshooting, undo; used
       as Release notes
 - [ ] User installs on device, records result in TODO W2

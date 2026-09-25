@@ -7,8 +7,8 @@ renders Vietnamese.
 Out of scope: book text (use normal sideloaded fonts), UI translation,
 dictionaries, patching libnickel or its stylesheets.
 
-Working files: `PLAN.md` (phases + progress), `TODO.md` (open questions,
-Breaking / Warning / Improvement), `FIRMWARE.md` (what stock firmware
+Working files: `docs/PLAN.md` (phases + progress), `docs/TODO.md` (open questions,
+Breaking / Warning / Improvement), `docs/FIRMWARE.md` (what stock firmware
 contains, with commands). Keep them current.
 
 ## Targets
@@ -16,7 +16,7 @@ contains, with commands). Keep them current.
 - Devices: Kobo Libra H2O (fw 4.38.23697) and Clara BW 2024 (fw 4.45). Their
   Rakuten UI fonts are byte-identical; only Libra H2O also ships
   Avenir/Georgia. Details
-  and commands: `FIRMWARE.md`.
+  and commands: `docs/FIRMWARE.md`.
 - Font directory on device: `/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/`
   (nickel uses Qt 4.6.2 embedded).
 - Stock fonts there are wrapped (`QTD` + length + zlib). We ship plain TTF,
@@ -56,7 +56,7 @@ nickel process. We don't touch reading fonts.
 ## Target files
 
 Defined once in `scripts/targets.py`; must match this table. Verified
-against firmware (see `FIRMWARE.md`). Weight = stock `usWeightClass`.
+against firmware (see `docs/FIRMWARE.md`). Weight = stock `usWeightClass`.
 
 | Filename | Family | Subfamily | Weight | On |
 |---|---|---|---|---|
@@ -139,7 +139,7 @@ OS-specific scripts.
 
 - Firmware updates restore stock fonts → re-copy the same tgz.
 - If firmware renames UI families again (as with Avenir → Rakuten Sans),
-  re-check the firmware as in `FIRMWARE.md`, update `targets.py`, rebuild.
+  re-check the firmware as in `docs/FIRMWARE.md`, update `targets.py`, rebuild.
 - A previous build rendered the UI bold; most likely wrong-weight sources,
   which the weight check now catches. Only if it recurs with verified
   weights: test a tgz whose Bold file carries Regular outlines. Normal →
@@ -151,8 +151,8 @@ OS-specific scripts.
 1. Don't claim something is verified without the command that showed it;
    otherwise mark it an assumption.
 2. Never loosen a check to get a build through. Fix the input, or log it in
-   `TODO.md`.
-3. Unclear decisions go in `TODO.md`, not in guesses. Don't build past a
+   `docs/TODO.md`.
+3. Unclear decisions go in `docs/TODO.md`, not in guesses. Don't build past a
    Breaking item that blocks the step.
 4. Commit sources, scripts, the vendored wheel and docs. Don't commit
    `build/`; releases carry the tgz. Keep only what the product needs.
