@@ -112,3 +112,26 @@ Libra 2 4.38 (same fonts as Libra H2O): `Avenir Next`, `Avenir.ttf`, and `font-f
 `font-family: Georgia;` in embedded HTML/CSS (e.g. "What's new" text).
 `Rakuten` does not appear as a plain string. Its stylesheet is probably
 stored compressed. Not investigated (we don't patch nickel).
+
+## Built-in reading fonts: Vietnamese coverage
+
+All non-UI fonts in the same font directory, unwrapped, checked against the
+146 precomposed Vietnamese letters + `đ Đ` (same set as `scripts/verify.py`,
+without `₫`), with fonttools `getBestCmap()`. Missing count per family:
+
+| Family | Libra H2O 4.38 | Clara BW 4.45 |
+|---|---|---|
+| Amasis | 92 | — |
+| Atkinson Hyperlegible | — | 98 |
+| Bariol | — | 92 |
+| Bitter | — | **0** |
+| Kobo Nickel | 6 | 6 |
+| Noto Sans | — | **0** |
+| OpenDyslexic | 101 | 101 |
+| Texturina | — | **0** |
+| Ubuntu | — | 88 |
+| Vollkorn | — | **0** |
+
+Other reading fonts shown in the picker may live elsewhere or be downloaded
+on demand; not checked. User fonts go in `/mnt/onboard/fonts` (the `fonts`
+folder on the USB drive), per `strings libnickel.so.1.0.0`.

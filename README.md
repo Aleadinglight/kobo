@@ -4,17 +4,53 @@ Makes the Kobo interface (library, book titles, menus, table of contents,
 reading progress) show Vietnamese correctly instead of boxes or broken
 accents.
 
-It replaces the system UI fonts with **Noto Sans**, which covers every
-Vietnamese letter. Book text is not affected; choose any reading font as
-usual.
-
 Tested targets: **Kobo Libra H2O** (firmware 4.38.23697) and **Kobo Clara BW**
 (firmware 4.45).
+
+## UI fonts vs. reading fonts
+
+A Kobo uses two separate sets of fonts:
+
+| | UI fonts | Reading fonts |
+|---|---|---|
+| Used for | Library, book titles, menus, table of contents, progress | The text of the book you're reading |
+| Chosen by | The Kobo itself, you can't pick them | You, in the **Aa** menu while reading |
+| Stored in | Hidden system folder inside the Kobo | Built in, plus the `fonts` folder on the Kobo drive |
+| Changed by | **This project** (`KoboRoot.tgz`) | Copying `.ttf` files into `fonts` |
+
+This project only replaces the **UI fonts**, with **Noto Sans**, which covers
+every Vietnamese letter. Your books and your reading-font choice are not
+touched.
+
+### Vietnamese in book text
+
+Book text uses whatever reading font you pick, so that font must support
+Vietnamese too. Built-in reading fonts that fully cover Vietnamese:
+
+| Device | Built-in reading fonts with full Vietnamese |
+|---|---|
+| Clara BW (4.45) | Bitter, Noto Sans, Texturina, Vollkorn |
+| Libra H2O (4.38) | none |
+
+If yours isn't in the list, or accents show as boxes in a book, add your own
+reading font:
+
+1. Connect the Kobo with USB.
+2. Open the Kobo drive. At the top level (next to `.kobo`, not inside it),
+   create a folder named `fonts` if it isn't there.
+3. Copy a Vietnamese-capable font's `.ttf` files into it, e.g. Noto Serif or
+   Literata from Google Fonts. Use the static files, named like
+   `Family-Regular.ttf`, `Family-Bold.ttf`, `Family-Italic.ttf`,
+   `Family-BoldItalic.ttf`.
+4. Eject. The font appears in the **Aa** menu while reading.
+
+No `KoboRoot.tgz` is needed for reading fonts, and they survive firmware
+updates.
 
 ## Install
 
 1. Download `KoboRoot.tgz` from the latest
-   [Release](../../releases/latest).
+   [Release](https://github.com/Aleadinglight/kobo/releases/latest).
 2. Connect the Kobo to your computer with USB and tap **Connect**.
 3. Open the Kobo drive and show hidden files so the `.kobo` folder appears:
    - **Mac:** in Finder press `Cmd + Shift + .`
