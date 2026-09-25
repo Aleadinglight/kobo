@@ -46,8 +46,20 @@ the Kobo drive (next to `.kobo`, create it if missing), then eject. No
 
 4. Copy `build/KoboRoot.tgz` to the Kobo as in [Install](#install).
 
-The build checks the font (weights, styles, Vietnamese coverage) and stops
-with a plain message if something is wrong.
+### What the build does
+
+1. Picks your font's Regular, Bold, Italic and Bold Italic from `sources/`
+   and checks them (correct weights and styles, full Vietnamese coverage).
+2. Makes 16 copies, one per Kobo system UI font file, and in each one:
+   - renames the font's **internal name** to the Kobo's (e.g. *Noto Sans
+     Bold* → *Rakuten Sans Bold*). The Kobo finds fonts by this name.
+   - saves it under the Kobo's **exact filename** (e.g.
+     `RakutenSansUIApp-Bold.ttf`), so it overwrites the original.
+3. Checks the 16 results again.
+4. Packs them into `KoboRoot.tgz`, set to unpack into the Kobo's system font
+   folder.
+
+If any check fails, it stops with a plain message saying what's wrong.
 
 ## More
 
